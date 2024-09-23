@@ -53,7 +53,10 @@ alter table barang
     rename to products;
 
 alter table products
-add column created_at timestamp default current_timestamp;
+    add column created_at timestamp default current_timestamp;
+
+alter table products
+    alter column code type varchar(10);
 
 select *
 from products;
@@ -68,4 +71,41 @@ truncate products;
 -- hapus table
 -- drop table products;
 
+insert into products (code, name, price)
+values ('CO11', 'XIAOMI', 100000);
 
+insert into products (code, name, price, qty)
+values ('CO13', 'SAMSUNG', 100000, 20);
+
+alter table products
+    add primary key (code);
+
+select *
+from products;
+
+select *
+from products as p
+where p.qty = 0;
+
+create type products_enum_category as enum ('PHONE', 'LAPTOP', 'TOOLS');
+
+alter table products
+    drop column category;
+
+alter table products
+    add column category products_enum_category default 'PHONE';
+
+update products
+set description = 'SOMETHING WITH THIS THING'
+where code = 'C013';
+
+update products
+set code = 'P001'
+where qty = 20;
+
+update products
+set description = 'INI HP'
+where code = 'P001';
+
+select *
+from products;
