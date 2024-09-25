@@ -185,3 +185,16 @@ select count(w.product_id) as total_wish, p.product_name
 from wishlists as w
          join products p on p.product_id = w.product_id
 group by p.product_name;
+
+select p.product_name, c.customer_name
+from wishlists w
+         join products p on p.product_id = w.product_id
+         join customers c on w.customer_id = c.customer_id;
+
+select p.product_name,
+       count(w.wishlist_id)              as total_wish,
+       string_agg(c.customer_name, ', ') as customer_names
+from wishlists w
+         join products p on p.product_id = w.product_id
+         join customers c on w.customer_id = c.customer_id
+group by p.product_name;
