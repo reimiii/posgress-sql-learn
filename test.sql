@@ -198,3 +198,27 @@ from wishlists w
          join products p on p.product_id = w.product_id
          join customers c on w.customer_id = c.customer_id
 group by p.product_name;
+
+create table wallet
+(
+    id          serial not null,
+    customer_id int    not null,
+    balance     int    not null default 0,
+    primary key (id),
+    constraint wallet_customer_unique unique (customer_id),
+    constraint balance_check check ( balance >= 0 ),
+    constraint fk_customer foreign key (customer_id) references customers (customer_id)
+);
+insert into wallet (customer_id, balance)
+values (1, 1000),
+       (2, 2000),
+       (3, 3000),
+       (4, 4000),
+       (5, 5000);
+
+select *
+from wallet;
+
+select c.customer_name, w.balance
+from customers as c
+         join wallet w on c.customer_id = w.customer_id;
