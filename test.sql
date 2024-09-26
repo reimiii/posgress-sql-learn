@@ -199,6 +199,7 @@ from wishlists w
          join customers c on w.customer_id = c.customer_id
 group by p.product_name;
 
+-- one to one
 create table wallet
 (
     id          serial not null,
@@ -209,6 +210,7 @@ create table wallet
     constraint balance_check check ( balance >= 0 ),
     constraint fk_customer foreign key (customer_id) references customers (customer_id)
 );
+
 insert into wallet (customer_id, balance)
 values (1, 1000),
        (2, 2000),
@@ -221,4 +223,43 @@ from wallet;
 
 select c.customer_name, w.balance
 from customers as c
-         join wallet w on c.customer_id = w.customer_id;
+         join wallet w on w.customer_id = c.customer_id;
+
+
+-- one category can have to many product
+create table categories
+(
+    id   serial,
+    name varchar(100) not null,
+    primary key (id)
+);
+
+alter table products
+    add column category_id int,
+    add constraint fk_category foreign key (category_id) references categories (id);
+
+insert into categories (name)
+values ('ACCESSORIES');
+
+select *
+from categories;
+
+select *
+from products;
+
+update products
+set category_id = 3
+where product_name ilike any (array ['%headp%', '%mouse%', '%monitor%'])
+
+select p.product_name as "name product", c.name as "category name"
+from products as p
+         join categories c on p.category_id = c.id;
+
+
+
+
+
+
+
+
+
