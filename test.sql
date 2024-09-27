@@ -256,6 +256,49 @@ from products as p
          join categories c on p.category_id = c.id;
 
 
+create table orders
+(
+    order_id   serial primary key,
+    order_date timestamp default current_timestamp
+);
+
+create table order_products
+(
+    order_id   int,
+    product_id int,
+    quantity   int not null,
+    primary key (order_id, product_id),
+    foreign key (order_id) references orders (order_id),
+    foreign key (product_id) references products (product_id)
+);
+
+insert into orders (order_id)
+values (1); -- membuat pesanan 1
+insert into order_products (order_id, product_id, quantity)
+values (1, 1, 2); -- produk a 2 buah
+insert into order_products (order_id, product_id, quantity)
+values (1, 2, 1); -- produk b 1 buah
+
+insert into orders (order_id)
+values (2); -- membuat pesanan 2
+insert into order_products (order_id, product_id, quantity)
+values (2, 1, 1); -- produk a 1 buah
+insert into order_products (order_id, product_id, quantity)
+values (2, 3, 3); -- produk c 3 buah
+
+select *
+from orders;
+
+select *
+from order_products;
+
+select *
+from products;
+
+select p.product_name "product", o.order_date "date", o.order_id "id", op.quantity
+from orders o
+         join order_products op on o.order_id = op.order_id
+         join products p on p.product_id = op.product_id;
 
 
 
