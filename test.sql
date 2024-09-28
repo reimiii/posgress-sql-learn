@@ -292,15 +292,47 @@ from orders;
 select *
 from order_products;
 
-select *
-from products;
+select p.product_name, c.name
+from products p
+         join categories c on p.category_id = c.id;
 
 select p.product_name "product", o.order_date "date", o.order_id "id", op.quantity
 from orders o
          join order_products op on o.order_id = op.order_id
          join products p on p.product_id = op.product_id;
 
+insert into categories (name)
+values ('NON-TECH');
 
+insert into products (product_name, price, stock)
+values ('ARCH LINUX', 10.00, 20),
+       ('DEBIAN LINUX', 9.00, 10);
+
+select *
+from categories;
+
+select p.product_name, c.name, p.price
+from categories c
+         inner join products p on c.id = p.category_id;
+
+select p.product_name, c.name "category", p.price
+from categories c
+         left join products p on c.id = p.category_id;
+
+select p.product_name, c.name "category", p.price
+from categories c
+         right join products p on c.id = p.category_id;
+
+select p.product_name, c.name "category", p.price
+from categories c
+         full join products p on c.id = p.category_id;
+
+select *
+from products;
+
+select p.product_name, c.name, p.price
+from products p
+         join categories c on p.category_id = c.id;
 
 
 
