@@ -335,6 +335,84 @@ from products p
          join categories c on p.category_id = c.id;
 
 
+select avg(p.price)
+from products p;
+
+select *
+from products p
+where p.price > (select avg(p.price)
+                 from products p);
+select product_name
+from products
+where product_id in (select product_id
+                     from order_products);
+
+select product_id, count(order_id) as total_orders
+from order_products
+group by product_id;
+
+select p.product_name, t.total_orders
+from products p
+         join (select product_id, count(order_id) as total_orders
+               from order_products
+               group by product_id) as t on p.product_id = t.product_id
+where p.stock > 0;
+
+select *
+from order_products;
+
+create table electronics
+(
+    product_id   serial primary key,
+    product_name varchar(100)   not null,
+    price        decimal(10, 2) not null
+);
+
+create table furniture
+(
+    product_id   serial primary key,
+    product_name varchar(100)   not null,
+    price        decimal(10, 2) not null
+);
+
+-- Isi data ke tabel electronics
+insert into electronics (product_name, price)
+values ('Laptop', 1500.00),
+       ('Smartphone', 800.00),
+       ('Headphones', 100.00),
+       ('Tablet', 600.00);
+
+-- Isi data ke tabel furniture
+insert into furniture (product_name, price)
+values ('Chair', 100.00),
+       ('Table', 500.00),
+       ('Couch', 1000.00),
+       ('Laptop Desk', 1500.00);
+
+insert into furniture (product_name, price)
+values ('Couch', 1000.00);
+
+select product_name, price
+from electronics
+union
+select product_name, price
+from furniture;
+
+select *
+from furniture;
+
+
+select product_name
+from furniture
+intersect
+select product_name
+from electronics;
+
+select product_name, price
+from electronics
+except
+select product_name, price
+from furniture;
 
 
 
