@@ -12,3 +12,12 @@ atau docs untuk: semua [data-type](https://www.postgresql.org/docs/current/datat
 
 melihat table `\dt` kalo pake query
 `select * from pg_tables where schemaname = 'public'`
+
+backup data di postgresql
+```bash
+docker exec -it db-postgres pg_dump --username=local --dbname=latihan --format=plain --file=/backup.sql --password
+
+# restore
+docker exec -it db-postgres psql --username=local --dbname=new_bak -f /backup.sql --password
+
+```
