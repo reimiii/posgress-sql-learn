@@ -445,8 +445,49 @@ set stock = stock - 5
 where product_id = 2;
 
 select *
-from products p where p.product_id = 2;
+from products p
+where p.product_id = 2;
 
+
+commit;
+
+begin;
+
+select *
+from products p
+where p.product_id = 1 for update;
+-- produk dengan id 1 sekarang terkunci oleh transaksi ini
+
+commit;
+
+create table accounts
+(
+    account_id serial primary key,
+    balance    numeric(10, 2) not null
+);
+
+insert into accounts (balance)
+values (1000),
+       (2000);
+
+select *
+from accounts;
+
+begin;
+
+-- transaksi 1 mengunci akun dengan account_id = 1
+update accounts
+set balance = balance - 100
+where account_id = 1;
+
+-- transaksi 1 mencoba mengunci akun dengan account_id = 2
+-- tapi akan menunggu jika transaksi 2 sudah mengunci akun tersebut
+update accounts
+set balance = balance + 100
+where account_id = 2;
+
+select *
+from accounts;
 
 commit;
 
