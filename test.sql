@@ -414,5 +414,40 @@ except
 select product_name, price
 from furniture;
 
+select nextval(pg_get_serial_sequence('orders', 'order_id'));
+select setval(pg_get_serial_sequence('orders', 'order_id'), (select max(order_id) from orders));
+
+
+--  start transaction
+begin;
+
+-- 1. tambah order baru ke tabel orders
+insert into orders (order_date)
+values (default)
+returning order_id;
+
+select *
+from orders;
+
+-- misal order_id yang baru saja dibuat adalah 3
+
+-- 2. tambahkan detail produk yang dipesan ke tabel order_products
+insert into order_products (order_id, product_id, quantity)
+values (4, 2, 5);
+-- misalnya, customer memesan 5 unit dari product_id 2
+
+select *
+from order_products;
+
+-- 3. update stok produk di tabel products
+update products
+set stock = stock - 5
+where product_id = 2;
+
+select *
+from products p where p.product_id = 2;
+
+
+commit;
 
 
